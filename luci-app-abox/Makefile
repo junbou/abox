@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Abox Addons
-LUCI_DEPENDS:=+luci-compat +nginx
+#LUCI_DEPENDS:=+luci-compat +nginx
 PKG_VERSION:=2.0.0
 PKG_RELEASE:=2
 
