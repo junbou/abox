@@ -1,0 +1,21 @@
+#!/bin/sh
+#
+# seems other files in the same directory is executable, so did i...
+#
+
+. /lib/functions/uci-defaults.sh
+
+board_config_update
+
+json_is_a network object && exit 0
+
+# customize by device: setup wan interface to eth0, and others(1-3) as lan.
+# for ther record, openwrt default: lan -> eth0
+ucidef_set_interfaces_lan_wan "eth1 eth2 eth3" "eth0"
+# customize LAN IP range 10.10.10.1/24
+ucidef_set_interface lan ipaddr "10.10.10.1"
+ucidef_set_interface lan netmask "255.255.255.0"
+
+board_config_flush
+
+exit 0

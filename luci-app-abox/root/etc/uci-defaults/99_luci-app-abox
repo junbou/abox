@@ -1,0 +1,141 @@
+#!/bin/sh
+#
+# this file should not executable according to official docs
+#
+uci set luci.main.lang=auto
+#uci set luci.main.mediaurlbase=/luci-static/material
+uci commit luci
+
+uci set system.@system[0].hostname=ABox
+uci set system.@system[0].timezone=CST-8
+uci set system.@system[0].zonename=Asia/Shanghai
+uci set system.@system[0].log_file=/var/log/system.log
+uci set system.@system[0].log_size=10240
+uci set system.ntp.enable_server=1
+uci commit system
+
+uci set fstab.@global[0].anon_mount=1
+uci commit fstab
+
+uci -q batch <<-EOF >/dev/null
+    delete dhcp.x86
+    delete dhcp.x86efi
+    delete dhcp.bcefi
+    delete dhcp.x86-boot
+    delete dhcp.x86efi-boot
+    delete dhcp.bcefi-boot
+    set dhcp.x86=match
+    set dhcp.x86.networkid='x86PC'
+    set dhcp.x86.match='option:client-arch,0'
+    set dhcp.x86efi=match
+    set dhcp.x86efi.networkid='x86-64_EFI'
+    set dhcp.x86efi.match='option:client-arch,7'
+    set dhcp.bcefi=match
+    set dhcp.bcefi.networkid='BC_EFI'
+    set dhcp.bcefi.match='option:client-arch,9'
+    set dhcp.x86Boot=boot
+    set dhcp.x86Boot.networkid='x86PC'
+    set dhcp.x86Boot.filename='bios/lpxelinux.0'
+    set dhcp.x86efiBoot=boot
+    set dhcp.x86efiBoot.networkid='x86-64_EFI'
+    set dhcp.x86efiBoot.filename='efi64/syslinux.efi'
+    set dhcp.bcefiBoot=boot
+    set dhcp.bcefiBoot.networkid='BC_EFI'
+    set dhcp.bcefiBoot.filename='efi64/syslinux.efi'
+
+    set dhcp.@dnsmasq[-1].enable_tftp=1
+    set dhcp.@dnsmasq[-1].tftp_root='/usr/share/tftp'
+    set dhcp.@dnsmasq[-1].domain='abox.lan'
+
+    set dhcp.lan.leasetime='1h'
+    set dhcp.lan.start='100'
+    set dhcp.lan.limit='150'
+    commit dhcp
+EOF
+
+uci -q batch <<-EOF >/dev/null
+    delete acme.example_wildcard
+    delete acme.example
+    delete acme.dnspod
+    delete acme.desec
+
+    set acme.dnspod=cert
+    set acme.dnspod.enabled=0
+    set acme.dnspod.use_staging=0
+    set acme.dnspod.keylength='ec-384'
+    set acme.dnspod.update_nginx=1
+    add_list acme.dnspod.domains='example.com'
+    add_list acme.dnspod.domains='*.example.com'
+    set acme.dnspod.dns='dns_dp'
+    add_list acme.dnspod.credentials='DP_Id=1234'
+    add_list acme.dnspod.credentials='DP_Key=abcdefg'
+
+    set acme.desec=cert
+    set acme.desec.enabled=0
+    set acme.desec.use_staging=0
+    set acme.desec.keylength='ec-384'
+    set acme.desec.update_nginx=1
+    add_list acme.desec.domains='example.com'
+    add_list acme.desec.domains='*.example.com'
+    set acme.desec.calias='example.net'
+    set acme.desec.dns='dns_desec'
+    add_list acme.desec.credentials='DEDYN_NAME=example.net'
+    add_list acme.desec.credentials='DEDYN_TOKEN=password'
+
+    commit acme
+EOF
+
+uci -q batch <<-EOF >/dev/null
+    delete ddns.myddns_ipv4
+    delete ddns.myddns_ipv6
+    delete ddns.dnspod_ipv4
+    delete ddns.desec_ipv4
+
+    set ddns.dnspod_ipv4=service
+    set ddns.dnspod_ipv4.service_name='dnspod.cn'
+    set ddns.dnspod_ipv4.enabled=0
+    set ddns.dnspod_ipv4.lookup_host='www.example.com'
+    set ddns.dnspod_ipv4.domain='www.example.com'
+    set ddns.dnspod_ipv4.username='123456'
+    set ddns.dnspod_ipv4.password='abcdefg'
+
+    set ddns.desec_ipv4=service
+    set ddns.desec_ipv4.service_name='desec.io'
+    set ddns.desec_ipv4.enabled=0
+    set ddns.desec_ipv4.lookup_host='www.example.com'
+    set ddns.desec_ipv4.domain='www.example.com'
+    set ddns.desec_ipv4.username='www.example.com'
+    set ddns.desec_ipv4.password='abcdefg'
+
+    commit ddns
+EOF
+
+uci -q batch <<-EOF >/dev/null
+    set dropbear.@dropbear[-1].Port=43517
+    commit dropbear
+EOF
+
+read release arch << EOF
+$(. /etc/openwrt_release ; echo ${DISTRIB_RELEASE%.*} $DISTRIB_ARCH)
+EOF
+for feed in passwall_luci passwall_packages passwall2; do
+  echo "src/gz $feed https://free.nchc.org.tw/osdn/storage/g/o/op/openwrt-passwall-build/releases/packages-$release/$arch/$feed" >> /etc/opkg/aboxfeeds.conf
+done
+
+rm /etc/nginx/nginx.conf
+mv /etc/nginx/luci_nginx_abox.conf /etc/nginx/nginx.conf
+uci -q batch <<-EOF >/dev/null
+    delete ucitrack.@httpserver[-1]
+    set ucitrack.@httpserver[-1].init=httpserver
+    commit ucitrack
+EOF
+
+#TODO
+# chinadns-ng? https://github.com/pexcn/openwrt-chinadns-ng
+# adguard?
+# wireguard default config?
+
+uci -q batch <<-EOF >/dev/null
+EOF
+
+return 0

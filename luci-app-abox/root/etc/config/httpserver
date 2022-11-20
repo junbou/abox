@@ -1,0 +1,5 @@
+config vhost
+	option enabled '0'
+	option hostname 'www.example.com'
+	option target 'http://example.net'
+	option httpsport '443'

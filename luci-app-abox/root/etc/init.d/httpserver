@@ -1,0 +1,62 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2015 OpenWrt.org
+
+START=50
+
+CERT_FILE=/etc/nginx/conf.d/cert.cer
+KEY_FILE=/etc/nginx/conf.d/cert.key
+
+add_extra_config() {
+	local cfg="$1"
+	local hostname target httpport=0 httpsport=0 disabled
+
+	config_get_bool disabled "$cfg" disabled 0
+	[ "$disabled" -gt 0 ] && return 0
+
+	config_get httpport "$cfg" httpport 0
+	config_get httpsport "$cfg" httpsport 0
+	config_get hostname "$cfg" hostname
+	config_get target "$cfg" target
+
+	[ "$httpport" -eq 0 -a "$httpsport" -eq 0 ] && return 0
+
+	local file=/etc/nginx/conf.d/vhost_$hostname.conf
+	local tmpfile=$file.tmp
+	echo -e "server {" > $tmpfile
+	if [ "$httpport" -gt 0 ]; then
+		echo -e "\tlisten $httpport;" >> $tmpfile
+	fi
+	if [ "$httpsport" -gt 0 ]; then
+		echo -e "\tlisten $httpsport ssl;" >> $tmpfile
+	fi
+	echo -e "\tserver_name $hostname;" >> $tmpfile
+	echo -e "\tlocation / {" >> $tmpfile
+	if [[ ${target:0:1} = '/' ]]; then
+		echo -e "\t\troot $target;" >> $tmpfile
+		echo -e "\t\tautoindex on;" >> $tmpfile
+		echo -e "\t\tautoindex_localtime on;" >> $tmpfile
+	else
+		echo -e "\t\tset \$target \"$target\";" >> $tmpfile
+		echo -e "\t\tproxy_pass \$target;" >> $tmpfile
+	fi
+	echo -e "\t}" >> $tmpfile
+	echo -e "}" >> $tmpfile
+	mv -f $tmpfile $file
+}
+
+start() {
+	mkdir -p /etc/nginx/conf.d
+	rm -f /etc/nginx/conf.d/vhost_*.conf
+	config_load httpserver
+	config_foreach add_extra_config vhost
+	[ -s /var/run/nginx.pid ] && kill -HUP `cat /var/run/nginx.pid` 2>/dev/null
+}
+
+stop() {
+	echo -n
+}
+
+reload() {
+	stop
+	start
+}

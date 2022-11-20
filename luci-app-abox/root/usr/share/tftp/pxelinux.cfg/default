@@ -1,0 +1,16 @@
+DEFAULT vesamenu.c32
+MENU TITLE PXE Boot Menu
+PROMPT 0
+TIMEOUT 60
+
+label Windows 2003 PE
+    MENU LABEL Windows 2003 PE
+    KERNEL memdisk
+    INITRD http://10.10.10.1/share/win2003pe.iso
+    APPEND iso raw
+
+label Windows 10 PE
+    MENU LABEL Windows 10 PE
+    KERNEL memdisk
+    INITRD http://10.10.10.1/share/wepe.iso
+    APPEND iso raw
