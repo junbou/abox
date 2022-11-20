@@ -18,7 +18,8 @@ jobs:
           - ver: 22.03.2
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Build
         uses: openwrt/gh-action-sdk@master
@@ -27,8 +28,12 @@ jobs:
           KEY_BUILD: ${{ secrets.SIGN_PV_KEY }}
           V: s
 
+      - name: Check output
+        run: |
+          ls -R .
+
       - name: Store packages
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.arch}}-packages
           path: bin/packages/${{ matrix.arch }}/packages/*.ipk
