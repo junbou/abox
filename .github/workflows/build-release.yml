@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         arch:
-          - x86_64
+          - x86-64
         ver:
           - 22.03.2
 

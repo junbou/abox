@@ -14,4 +14,4 @@ make image PACKAGES="dnsmasq-full ip-full nginx-mod-luci-ssl luci-ssl-nginx uwsg
     block-mount fdisk luci-app-statistics luci-i18n-statistics-zh-cn collectd-mod-sensors collectd-mod-thermal \
     acme-dnsapi luci-i18n-acme-zh-cn luci-i18n-ttyd-zh-cn ddns-scripts-dnspod ddns-scripts-cloudflare \
     luci-app-passwall luci-i18n-passwall-zh-cn xray-core v2ray-core v2ray-geoip v2ray-geosite tcping \
-    trojan chinadns-ng brook"
+    trojan chinadns-ng brook luci-app-abox luci-i18n-dockerman-zh-cn dockerd"
