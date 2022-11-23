@@ -33,6 +33,7 @@ jobs:
         run: |
           docker run --rm \
             -v $GITHUB_WORKSPACE/bin/packages/${{ matrix.arch }}/abox:/abox \
+            -v $GITHUB_WORKSPACE/abox.pub:/abox.pub \
             -v $GITHUB_WORKSPACE/build-image.sh:/build-image.sh \
             ghcr.io/junwun/imagebuilder:${{ matrix.arch}}-${{ matrix.ver }} \
             /build-image.sh
