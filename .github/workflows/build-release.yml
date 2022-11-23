@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         arch:
-          - x86-64
+          - x86_64
         ver:
           - 22.03.2
 
@@ -32,9 +32,9 @@ jobs:
       - name: Build image
         run: |
           docker run --rm \
-            -v bin/packages/${{ matrix.arch }}/abox:/abox \
-            -v build-image.sh:/build-image.sh \
-            openwrt/imagebuilder:${{ matrix.arch}}-${{ matrix.ver }} \
+            -v $GITHUB_WORKSPACE/bin/packages/${{ matrix.arch }}/abox:/abox \
+            -v $GITHUB_WORKSPACE/build-image.sh:/build-image.sh \
+            ghcr.io/junwun/imagebuilder:${{ matrix.arch}}-${{ matrix.ver }} \
             /build-image.sh
         shell: bash
 
@@ -46,4 +46,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.arch}}-packages
-          path: bin/packages/${{ matrix.arch }}/abox/*
+          path: bin/packages/${{ matrix.arch }}/abox/*  
