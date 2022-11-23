@@ -29,7 +29,7 @@ jobs:
           KEY_BUILD: ${{ secrets.SIGN_PV_KEY }}
           V: s
 
-      - name: Build image
+      - name: Build images
         run: |
           docker run --rm \
             -v $GITHUB_WORKSPACE/bin/packages/${{ matrix.arch }}/abox:/abox \
@@ -37,10 +37,6 @@ jobs:
             ghcr.io/junwun/imagebuilder:${{ matrix.arch}}-${{ matrix.ver }} \
             /build-image.sh
         shell: bash
-
-      - name: Check output
-        run: |
-          ls -R .
 
       - name: Store packages
         uses: actions/upload-artifact@v3
