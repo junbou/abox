@@ -7,9 +7,9 @@ echo "src/gz abox file:///abox" >> repositories.conf
 sed -i 's/CONFIG_TARGET_KERNEL_PARTSIZE=.*/CONFIG_TARGET_KERNEL_PARTSIZE=24/' .config
 sed -i 's/CONFIG_TARGET_ROOTFS_PARTSIZE=.*/CONFIG_TARGET_ROOTFS_PARTSIZE=1000/' .config
 for feed in passwall_luci passwall_packages passwall2; do
-  echo "src/gz $feed https://free.nchc.org.tw/osdn/storage/g/o/op/openwrt-passwall-build/releases/packages-22.03/x86_64/$feed" >> repositories.conf
+  echo "src/gz $feed https://osdn.dl.osdn.net/storage/g/o/op/openwrt-passwall-build/releases/packages-22.03/x86_64/$feed" >> repositories.conf
 done
-wget https://free.nchc.org.tw/osdn/storage/g/o/op/openwrt-passwall-build/passwall.pub
+wget https://osdn.dl.osdn.net/storage/g/o/op/openwrt-passwall-build/passwall.pub
 fp=$(./staging_dir/host/bin/usign -F -p passwall.pub)
 mv passwall.pub keys/$fp
 fp=$(./staging_dir/host/bin/usign -F -p /abox.pub)
