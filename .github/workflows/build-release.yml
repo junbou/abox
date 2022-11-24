@@ -32,6 +32,7 @@ jobs:
       - name: Build images
         run: |
           mkdir -p $GITHUB_WORKSPACE/targets/${{ matrix.arch }}
+          sudo chown -R 1000:1000 $GITHUB_WORKSPACE/targets/${{ matrix.arch }}
           docker run --rm \
             -v $GITHUB_WORKSPACE/bin/packages/${{ matrix.arch }}/abox:/abox \
             -v $GITHUB_WORKSPACE/abox.pub:/abox.pub \
@@ -39,6 +40,7 @@ jobs:
             -v $GITHUB_WORKSPACE/targets/${{ matrix.arch }}:/home/build/openwrt/bin/targets \
             ghcr.io/junwun/imagebuilder:${{ matrix.arch}}-${{ matrix.ver }} \
             /build-image.sh
+          sudo chown -R --reference=$GITHUB_WORKSPACE/targets/${{ matrix.arch }}/.. $GITHUB_WORKSPACE/targets/${{ matrix.arch }}
         shell: bash
 
       - name: Store packages
