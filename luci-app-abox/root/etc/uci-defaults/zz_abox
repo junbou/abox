@@ -66,6 +66,7 @@ uci -q batch <<-EOF >/dev/null
     set acme.dnspod.update_nginx=1
     add_list acme.dnspod.domains='example.com'
     add_list acme.dnspod.domains='*.example.com'
+    set acme.dnspod.validation_method='dns'
     set acme.dnspod.dns='dns_dp'
     add_list acme.dnspod.credentials='DP_Id=1234'
     add_list acme.dnspod.credentials='DP_Key=abcdefg'
@@ -77,7 +78,7 @@ uci -q batch <<-EOF >/dev/null
     set acme.desec.update_nginx=1
     add_list acme.desec.domains='example.com'
     add_list acme.desec.domains='*.example.com'
-    set acme.desec.calias='example.net'
+    set acme.desec.validation_method='dns'
     set acme.desec.dns='dns_desec'
     add_list acme.desec.credentials='DEDYN_NAME=example.net'
     add_list acme.desec.credentials='DEDYN_TOKEN=password'
@@ -122,8 +123,11 @@ for feed in passwall_luci passwall_packages passwall2; do
   echo "src/gz $feed https://free.nchc.org.tw/osdn/storage/g/o/op/openwrt-passwall-build/releases/packages-$release/$arch/$feed" >> /etc/opkg/aboxfeeds.conf
 done
 
-rm /etc/nginx/nginx.conf
-mv /etc/nginx/luci_nginx_abox.conf /etc/nginx/nginx.conf
+uci -q batch <<-EOF >/dev/null
+    set nginx.main.uci_enable='false'
+    commit nginx
+EOF
+
 uci -q batch <<-EOF >/dev/null
     delete ucitrack.@httpserver[-1]
     set ucitrack.@httpserver[-1].init=httpserver
@@ -131,8 +135,6 @@ uci -q batch <<-EOF >/dev/null
 EOF
 
 #TODO
-# chinadns-ng? https://github.com/pexcn/openwrt-chinadns-ng
-# adguard?
 # wireguard default config?
 
 uci -q batch <<-EOF >/dev/null

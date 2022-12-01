@@ -1,17 +1,14 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2015 OpenWrt.org
 
-START=50
-
-CERT_FILE=/etc/nginx/conf.d/cert.cer
-KEY_FILE=/etc/nginx/conf.d/cert.key
+START=90
 
 add_extra_config() {
 	local cfg="$1"
-	local hostname target httpport=0 httpsport=0 disabled
+	local hostname target httpport=0 httpsport=0 enabled
 
-	config_get_bool disabled "$cfg" disabled 0
-	[ "$disabled" -gt 0 ] && return 0
+	config_get_bool enabled "$cfg" enabled 0
+	[ "$enabled" -lt 1 ] && return 0
 
 	config_get httpport "$cfg" httpport 0
 	config_get httpsport "$cfg" httpsport 0
@@ -49,11 +46,11 @@ start() {
 	rm -f /etc/nginx/conf.d/vhost_*.conf
 	config_load httpserver
 	config_foreach add_extra_config vhost
-	[ -s /var/run/nginx.pid ] && kill -HUP `cat /var/run/nginx.pid` 2>/dev/null
+	service nginx reload
 }
 
 stop() {
-	echo -n
+	rm -f /etc/nginx/conf.d/vhost_*.conf
 }
 
 reload() {
