@@ -70,6 +70,7 @@ uci -q batch <<-EOF >/dev/null
     set acme.dnspod.dns='dns_dp'
     add_list acme.dnspod.credentials='DP_Id=1234'
     add_list acme.dnspod.credentials='DP_Key=abcdefg'
+    set acme.desec.update_nginx='1'
 
     set acme.desec=cert
     set acme.desec.enabled=0
@@ -82,6 +83,7 @@ uci -q batch <<-EOF >/dev/null
     set acme.desec.dns='dns_desec'
     add_list acme.desec.credentials='DEDYN_NAME=example.net'
     add_list acme.desec.credentials='DEDYN_TOKEN=password'
+    set acme.desec.update_nginx='0'
 
     commit acme
 EOF
@@ -95,6 +97,10 @@ uci -q batch <<-EOF >/dev/null
     set ddns.dnspod_ipv4=service
     set ddns.dnspod_ipv4.service_name='dnspod.cn'
     set ddns.dnspod_ipv4.enabled=0
+    set ddns.dnspod_ipv4.use_ipv6=0
+    set ddns.dnspod_ipv4.ip_source='network'
+    set ddns.dnspod_ipv4.ip_network='wan'
+    set ddns.dnspod_ipv4.interface='wan'
     set ddns.dnspod_ipv4.lookup_host='www.example.com'
     set ddns.dnspod_ipv4.domain='www.example.com'
     set ddns.dnspod_ipv4.username='123456'
@@ -103,6 +109,10 @@ uci -q batch <<-EOF >/dev/null
     set ddns.desec_ipv4=service
     set ddns.desec_ipv4.service_name='desec.io'
     set ddns.desec_ipv4.enabled=0
+    set ddns.desec_ipv4.use_ipv6=0
+    set ddns.desec_ipv4.ip_source='network'
+    set ddns.desec_ipv4.ip_network='wan'
+    set ddns.desec_ipv4.interface='wan'
     set ddns.desec_ipv4.lookup_host='www.example.com'
     set ddns.desec_ipv4.domain='www.example.com'
     set ddns.desec_ipv4.username='www.example.com'
@@ -123,8 +133,11 @@ for feed in passwall_luci passwall_packages passwall2; do
   echo "src/gz $feed https://free.nchc.org.tw/osdn/storage/g/o/op/openwrt-passwall-build/releases/packages-$release/$arch/$feed" >> /etc/opkg/aboxfeeds.conf
 done
 
+# create self-signed cert for nginx
+openssl req -x509 -nodes -newkey rsa:4096 -keyout /etc/nginx/conf.d/local.key -out /etc/nginx/conf.d/local.crt -sha256 -days 365 -subj "/CN=abox.lan"
+
 uci -q batch <<-EOF >/dev/null
-    set nginx.main.uci_enable='false'
+    set nginx.global.uci_enable='false'
     commit nginx
 EOF
 
