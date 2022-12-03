@@ -46,7 +46,7 @@ start() {
 	rm -f /etc/nginx/conf.d/vhost_*.conf
 	config_load httpserver
 	config_foreach add_extra_config vhost
-	service nginx reload
+	/etc/init.d/nginx reload
 }
 
 stop() {
