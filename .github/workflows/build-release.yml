@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - '*'
 
 jobs:
   release:
@@ -49,3 +51,10 @@ jobs:
         with:
           name: ${{ matrix.arch}}-packages
           path: targets/${{ matrix.arch }}/*
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            targets/${{ matrix.arch }}/*
