@@ -41,7 +41,7 @@ jobs:
             -v $GITHUB_WORKSPACE/abox.pub:/abox.pub \
             -v $GITHUB_WORKSPACE/.github/workflows/build-image.sh:/build-image.sh \
             -v $GITHUB_WORKSPACE/targets/${{ matrix.arch }}:/home/build/openwrt/bin/targets \
-            ghcr.io/junwun/imagebuilder:${{ matrix.arch}}-${{ matrix.ver }} \
+            ghcr.io/openwrt/imagebuilder:${{ matrix.arch}}-${{ matrix.ver }} \
             /build-image.sh
           sudo chown -R --reference=$GITHUB_WORKSPACE/targets/${{ matrix.arch }}/.. $GITHUB_WORKSPACE/targets/${{ matrix.arch }}
         shell: bash
