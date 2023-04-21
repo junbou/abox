@@ -31,3 +31,5 @@ make image ADD_LOCAL_KEY=1 PACKAGES="-dnsmasq -ip-tiny dnsmasq-full ip-full luci
     luci-i18n-passwall-zh-cn xray-core v2ray-core v2ray-geoip v2ray-geosite tcping trojan chinadns-ng brook \
     iptables-zz-legacy iptables-mod-conntrack-extra iptables-mod-iprange iptables-mod-socket iptables-mod-tproxy kmod-ipt-nat \
     luci-app-abox"
+pwd
+ls -l .
