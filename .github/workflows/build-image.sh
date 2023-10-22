@@ -11,10 +11,13 @@ sed -i 's/.*CONFIG_VHDX_IMAGES.*/CONFIG_VHDX_IMAGES=y/' .config
 sed -i 's/CONFIG_USES_EXT4=.*/# CONFIG_USES_EXT4/' .config
 sed -i 's/CONFIG_TARGET_ROOTFS_TARGZ=.*/# CONFIG_TARGET_ROOTFS_TARGZ/' .config
 sed -i 's/CONFIG_TARGET_ROOTFS_EXT4FS=.*/# CONFIG_TARGET_ROOTFS_EXT4FS/' .config
+read release arch << EOF
+$(. /etc/openwrt_release ; echo ${DISTRIB_RELEASE%.*} $DISTRIB_ARCH)
+EOF
 for feed in passwall_luci passwall_packages passwall2; do
-  echo "src/gz $feed https://osdn.dl.osdn.net/storage/g/o/op/openwrt-passwall-build/releases/packages-22.03/x86_64/$feed" >> repositories.conf
+  echo "src/gz $feed https://master.dl.sourceforge.net/project/openwrt-passwall-build/releases/packages-$release/$arch/$feed" >> /etc/opkg/customfeeds.conf
 done
-wget https://osdn.dl.osdn.net/storage/g/o/op/openwrt-passwall-build/passwall.pub
+wget https://master.dl.sourceforge.net/project/openwrt-passwall-build/passwall.pub
 fp=$(./staging_dir/host/bin/usign -F -p passwall.pub)
 mv passwall.pub keys/$fp
 fp=$(./staging_dir/host/bin/usign -F -p /abox.pub)
