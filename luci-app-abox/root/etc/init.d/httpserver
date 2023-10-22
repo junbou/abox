@@ -22,9 +22,11 @@ add_extra_config() {
 	echo -e "server {" > $tmpfile
 	if [ "$httpport" -gt 0 ]; then
 		echo -e "\tlisten $httpport;" >> $tmpfile
+		echo -e "\tlisten [::]:$httpport;" >> $tmpfile
 	fi
 	if [ "$httpsport" -gt 0 ]; then
 		echo -e "\tlisten $httpsport ssl;" >> $tmpfile
+		echo -e "\tlisten [::]:$httpsport ssl;" >> $tmpfile
 	fi
 	echo -e "\tserver_name $hostname;" >> $tmpfile
 	echo -e "\tlocation / {" >> $tmpfile

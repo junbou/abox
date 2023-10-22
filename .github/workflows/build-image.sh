@@ -19,17 +19,16 @@ fp=$(./staging_dir/host/bin/usign -F -p passwall.pub)
 mv passwall.pub keys/$fp
 fp=$(./staging_dir/host/bin/usign -F -p /abox.pub)
 cp /abox.pub keys/$fp
-# TODO remove iptables if dnsmasq > 2.87
 make image ADD_LOCAL_KEY=1 PACKAGES="-dnsmasq -ip-tiny dnsmasq-full ip-full luci-ssl-nginx \
     luci-i18n-base-zh-cn luci-i18n-firewall-zh-cn luci-i18n-samba4-zh-cn luci-i18n-wireguard-zh-cn \
     luci-i18n-opkg-zh-cn luci-i18n-upnp-zh-cn luci-i18n-ddns-zh-cn luci-i18n-wol-zh-cn luci-i18n-ttyd-zh-cn \
     luci-i18n-statistics-zh-cn luci-i18n-watchcat-zh-cn luci-i18n-acme-zh-cn \
     luci-i18n-nft-qos-zh-cn luci-i18n-nlbwmon-zh-cn luci-i18n-adblock-zh-cn \
-    curl openssh-sftp-server lrzsz mtr tcpdump bind-tools diffutils block-mount fdisk podman crun cni-plugins-nft \
+    curl openssh-sftp-server lrzsz mtr tcpdump bind-tools diffutils block-mount fdisk dockerd docker-compose \
     atop netatop dnstop httping ifstat iftop iperf3 tree whois \
     collectd-mod-sensors collectd-mod-thermal acme-dnsapi ddns-scripts-dnspod ddns-scripts-cloudflare \
     luci-i18n-passwall-zh-cn xray-core v2ray-core v2ray-geoip v2ray-geosite tcping trojan chinadns-ng brook \
-    iptables-zz-legacy iptables-mod-conntrack-extra iptables-mod-iprange iptables-mod-socket iptables-mod-tproxy kmod-ipt-nat \
+    iptables-mod-conntrack-extra iptables-mod-iprange iptables-mod-socket iptables-mod-tproxy kmod-ipt-nat \
     luci-app-abox"
 pwd
 ls bin
