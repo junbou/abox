@@ -1,6 +1,10 @@
 #!/bin/bash
 
 #docker run -it --rm -v /home/jun/project/abox/build-image.sh:/build-image.sh openwrt/imagebuilder:x86-64-22.03.2 /build-image.sh
+release=$1
+arch=$2
+release=${release#v}
+release=${release%.*}
 ls -l .
 ls -l /abox
 echo "src/gz abox file:///abox" >> repositories.conf
@@ -11,11 +15,8 @@ sed -i 's/.*CONFIG_VHDX_IMAGES.*/CONFIG_VHDX_IMAGES=y/' .config
 sed -i 's/CONFIG_USES_EXT4=.*/# CONFIG_USES_EXT4/' .config
 sed -i 's/CONFIG_TARGET_ROOTFS_TARGZ=.*/# CONFIG_TARGET_ROOTFS_TARGZ/' .config
 sed -i 's/CONFIG_TARGET_ROOTFS_EXT4FS=.*/# CONFIG_TARGET_ROOTFS_EXT4FS/' .config
-read release arch << EOF
-$(. /etc/openwrt_release ; echo ${DISTRIB_RELEASE%.*} $DISTRIB_ARCH)
-EOF
 for feed in passwall_luci passwall_packages passwall2; do
-  echo "src/gz $feed https://master.dl.sourceforge.net/project/openwrt-passwall-build/releases/packages-$release/$arch/$feed" >> /etc/opkg/customfeeds.conf
+  echo "src/gz $feed https://master.dl.sourceforge.net/project/openwrt-passwall-build/releases/packages-$release/$arch/$feed" >> >> repositories.conf
 done
 wget https://master.dl.sourceforge.net/project/openwrt-passwall-build/passwall.pub
 fp=$(./staging_dir/host/bin/usign -F -p passwall.pub)

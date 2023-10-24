@@ -42,7 +42,7 @@ jobs:
             -v $GITHUB_WORKSPACE/.github/workflows/build-image.sh:/build-image.sh \
             -v $GITHUB_WORKSPACE/targets/${{ matrix.arch }}:/builder/bin/targets \
             ghcr.io/junbou/imagebuilder:${{ matrix.arch}}-${{ matrix.ver }} \
-            /build-image.sh
+            /build-image.sh ${{ matrix.ver }} ${{ matrix.arch}}
           sudo chown -R --reference=$GITHUB_WORKSPACE/targets/${{ matrix.arch }}/.. $GITHUB_WORKSPACE/targets/${{ matrix.arch }}
         shell: bash
 
