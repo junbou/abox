@@ -27,12 +27,14 @@ make image ADD_LOCAL_KEY=1 PACKAGES="-dnsmasq -ip-tiny dnsmasq-full ip-full luci
     luci-i18n-base-zh-cn luci-i18n-firewall-zh-cn luci-i18n-samba4-zh-cn luci-proto-wireguard \
     luci-i18n-opkg-zh-cn luci-i18n-upnp-zh-cn luci-i18n-ddns-zh-cn luci-i18n-wol-zh-cn luci-i18n-ttyd-zh-cn \
     luci-i18n-statistics-zh-cn luci-i18n-watchcat-zh-cn luci-i18n-acme-zh-cn \
-    luci-i18n-nft-qos-zh-cn luci-i18n-nlbwmon-zh-cn luci-i18n-adblock-zh-cn \
+    luci-i18n-nft-qos-zh-cn luci-i18n-nlbwmon-zh-cn luci-i18n-adblock-zh-cn luci-i18n-dockerman-zh-cn \
     curl openssh-sftp-server lrzsz mtr tcpdump bind-tools diffutils block-mount fdisk dockerd docker-compose \
     atop netatop dnstop httping ifstat iftop iperf3 tree whois \
     collectd-mod-sensors collectd-mod-thermal acme-acmesh-dnsapi ddns-scripts-dnspod ddns-scripts-cloudflare \
     luci-i18n-passwall-zh-cn xray-core v2ray-core v2ray-geoip v2ray-geosite tcping trojan chinadns-ng brook \
     iptables-mod-conntrack-extra iptables-mod-iprange iptables-mod-socket iptables-mod-tproxy kmod-ipt-nat \
-    luci-app-abox"
+    iptables-nft ip6tables-nft kmod-nft-socket kmod-nft-tproxy \
+    "
+#    luci-app-abox"
 pwd
 ls bin
