@@ -32,9 +32,8 @@ make image ADD_LOCAL_KEY=1 PACKAGES="-dnsmasq -ip-tiny dnsmasq-full ip-full luci
     atop netatop dnstop httping ifstat iftop iperf3 tree whois \
     collectd-mod-sensors collectd-mod-thermal acme-acmesh-dnsapi ddns-scripts-dnspod ddns-scripts-cloudflare \
     luci-i18n-passwall-zh-cn xray-core v2ray-core v2ray-geoip v2ray-geosite tcping trojan chinadns-ng brook \
-    iptables-mod-conntrack-extra iptables-mod-iprange iptables-mod-socket iptables-mod-tproxy kmod-ipt-nat \
-    iptables-nft ip6tables-nft kmod-nft-socket kmod-nft-tproxy \
-    "
-#    luci-app-abox"
+    iptables-mod-conntrack-extra iptables-mod-iprange iptables-mod-socket iptables-mod-tproxy iptables-nft \
+    ip6tables-nft ip6tables-extra kmod-ipt-nat kmod-nft-socket kmod-nft-tproxy kmod-fs-autofs4 \
+    luci-app-abox"
 pwd
 ls bin

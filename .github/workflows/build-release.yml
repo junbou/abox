@@ -52,6 +52,14 @@ jobs:
           name: ${{ matrix.arch}}-packages
           path: targets/${{ matrix.arch }}/*
 
+      - name: Put Draft
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/heads/')
+        with:
+          draft: true
+          files: |
+            **/*-squashfs-combined.vhdx
+
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
