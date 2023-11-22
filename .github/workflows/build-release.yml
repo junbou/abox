@@ -17,7 +17,7 @@ jobs:
         arch:
           - x86_64
         ver:
-          - v23.05.0
+          - v23.05.2
 
     steps:
       - name: Checkout
