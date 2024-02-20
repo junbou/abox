@@ -34,7 +34,7 @@ jobs:
       - name: Build images
         run: |
           pwd
-          ls -l .
+          ls -R bin
           mkdir -p $GITHUB_WORKSPACE/targets/${{ matrix.arch }}
           sudo chown -R 1000:1000 $GITHUB_WORKSPACE/targets/${{ matrix.arch }}
           sudo chown -R 1000:1000 $GITHUB_WORKSPACE/bin/packages/${{ matrix.arch }}
