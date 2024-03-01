@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Build packages
         uses: openwrt/gh-action-sdk@main
@@ -49,22 +49,17 @@ jobs:
           sudo chown -R --reference=$GITHUB_WORKSPACE/targets/${{ matrix.arch }}/.. $GITHUB_WORKSPACE/targets/${{ matrix.arch }}
         shell: bash
 
-      - name: Store packages
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.arch}}-packages
-          path: targets/${{ matrix.arch }}/*
-
       - name: Put Draft
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@4634c16e79c963813287e889244c50009e7f0981
         if: startsWith(github.ref, 'refs/heads/')
         with:
           draft: true
           files: |
             **/*-squashfs-combined.vhdx
+            abox.tar.gz
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@4634c16e79c963813287e889244c50009e7f0981
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
