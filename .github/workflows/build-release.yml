@@ -35,6 +35,7 @@ jobs:
         run: |
           pwd
           ls -R bin
+          tar cvzf abox.tar.gz bin
           mkdir -p $GITHUB_WORKSPACE/targets/${{ matrix.arch }}
           sudo chown -R 1000:1000 $GITHUB_WORKSPACE/targets/${{ matrix.arch }}
           sudo chown -R 1000:1000 $GITHUB_WORKSPACE/bin/packages/${{ matrix.arch }}
