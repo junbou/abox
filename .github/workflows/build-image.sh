@@ -5,7 +5,7 @@ release=$1
 arch=$2
 release=${release#v}
 release=${release%.*}
-release=23.05.1
+release=23.05.2
 mkdir -p build
 ls -l .
 pushd build
